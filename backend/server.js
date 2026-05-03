@@ -42,7 +42,7 @@ app.get("/admin", async (req, res) => {
 // Crear productos
 app.post("/crearProducto", async (req, res) => {
     await Producto.create(req.body);
-    res.redirect(nuevoproducto);
+    res.redirect("/admin");
 
 });
 

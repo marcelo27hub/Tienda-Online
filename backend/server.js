@@ -8,17 +8,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-mongoose.connect("mongodb+srv://marcelov27:mogondb27@cluster0.wgdl93g.mongodb.net/")
-    .then(() => console.log("cconectado a mongodb"))
+mongoose.connect("mongodb+srv://marcelov:mongodb27@cluster0.wgdl93g.mongodb.net/")
+    .then(() => console.log("conectado a mongodb"))
     .catch(err => console.log(err));
 
 const modelodeproducto = new mongoose.Schema({
-    nombre: String,
-    precio: Number,
-    desripcion: String
+    nombre: { type: String, required: true },
+    precio: { type: Number, required: true },
+    descripcion: { type: String, required: true }
 });
 
-const producto = mongoose.model("producto", modelodeproducto);
+const Producto = mongoose.model("producto", modelodeproducto);
 
 //ruta base
 app.get("/", (req, res) => {
@@ -27,20 +27,15 @@ app.get("/", (req, res) => {
 
 
 //ver productos
-let productos = []
-app.get("/products", (req, res) =>{
+app.get("/productos", async  (req, res) =>{
+    const productos = await Producto.find();
     res.json(productos);
 });
 
 //enviar productos
-app.post("/enviarProducto", (req, res) => {
-    const nuevoproducto = {
-        id : Date.now(),
-        ...req.body
-    };
-
-    productos.push(nuevoproducto);
-    res.send("producto agregado");
+app.post("/crearProducto", async (req, res) => {
+    const nuevoproducto = await Producto.create(req.body);
+    res.json(nuevoproducto);
 
 });
 
@@ -63,28 +58,21 @@ app.post("/login", (req, res) => {
 
 
 //actualizar productos
-app.put("/products/:id", (req, res) => {
-    const {id} = req.params;
-
-    const  producto = productos.find( p => p.id == id);
-
-    if (!producto) {
-        res.send("producto no encontrado");
-    }
-
-    Object.assign(producto, req.body);
-    res.send("producto actualizado");
+app.put("/products/:id", async (req, res) => {
+    const actualizado = await Producto.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {new: true}
+    );
+    res.json(actualizado);
 });
 
 
 //eliminar productos
-app.delete("/eliminar/:id", (req, res) => {
-    const {id} = req.params;
-
-    productos = productos.filter(p => p.id != id);
-
-    res.send("productos eliminado")
-})
+app.delete("/eliminar/:id", async (req, res) => {
+    await Producto.findByIdAndDelete(req.params.id);
+    res.send("producto eliminado")
+});
 
 
 // puerto en la cual escucha mi servidor 

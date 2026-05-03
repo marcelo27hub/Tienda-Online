@@ -7,16 +7,20 @@ html
 
         // LISTA DE PRODUCTOS
         each p in productos
-            p #{p.nombre}
-            p #{p.precio}
-            p #{p.descripcion}
+            div 
+                p #{p.nombre}
+                p #{p.precio}
+                p #{p.descripcion}
 
 
-            //ELIMINAR
-            form(action=`/eliminar/${p._id}` method="POST") 
-                button(type="submit") Eliminar 
+                // EDITAR
+                a(href=`/editar/${p._id}`) Editar 
 
-            hr 
+                // ELIMINAR
+                form(action=`/eliminar/${p._id}` method="POST") 
+                    button(type="submit") Eliminar 
+
+                hr 
 
         // CREAR PRODUCTO
         h2 Crear producto 

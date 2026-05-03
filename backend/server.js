@@ -8,17 +8,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+//motor de plantilla pug
+app.set("view engine", "pug");
+app.set("views", "./views");
+
+//conexión a la base de datos MongoDB usando URI (Atlas)
 mongoose.connect("mongodb+srv://marcelov:mongodb27@cluster0.wgdl93g.mongodb.net/")
     .then(() => console.log("conectado a mongodb"))
     .catch(err => console.log(err));
 
-const modelodeproducto = new mongoose.Schema({
-    nombre: { type: String, required: true },
-    precio: { type: Number, required: true },
-    descripcion: { type: String, required: true }
-});
-
-const Producto = mongoose.model("producto", modelodeproducto);
+//modelo de productos (mongoDB)
+const Producto = require("./models/producto");
 
 //ruta base
 app.get("/", (req, res) => {

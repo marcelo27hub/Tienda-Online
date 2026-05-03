@@ -3,10 +3,10 @@ const Producto = require("../models/producto");
 // Admin
 
 exports.getAdmin = async (req, res) => {
-    if (!req.app.locals.isLoggedIn) {
+    if (!req.session.isLoggedIn) {
         return res.redirect("/login");
     }
-    
+
     const productos = await Producto.find();
     res.render("admin", {productos});
 };

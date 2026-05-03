@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 
 //variable global, si el admin se logueo
-let isLoggedIn = false;
+app.locals.isLoggedIn = false;
 
 // middleware para leeer JSON
 app.use(express.json());
@@ -23,8 +23,9 @@ mongoose.connect("mongodb+srv://marcelov:mongodb27@cluster0.wgdl93g.mongodb.net/
 
 // rutas
 const productoRoutes = require("./routes/productoRoutes");
-const producto = require("./models/producto");
 app.use(productoRoutes);
+
+const producto = require("./models/producto");
 
 // base
 app.get("/", (req, res) => {
@@ -41,27 +42,18 @@ app.post("/login", (req, res) => {
     const { email, password } = req.body;
 
     if (email === "marce@" && password === "1234") {
-        isLoggedIn = true
-        res.redirect("/admin");
+        app.locals.isLoggedIn = true;
+        return res.redirect("/admin");
     } else {
         res.send("Datos incorrectos");
     }
 });
 
-// redireccionar a login si no se logueo. Y si lo hizo admin recibe los productos
-app.get("/admin", async (req, res) => {
-    if (!isLoggedIn) {
-        return res.redirect("/login");
-    }
-
-    const productos = await producto.find();
-    res.render("admin", { productos });
-});
 
 // logout 
 app.get("/logout", (req, res) => {
-    isLoggedIn = false;
-    res.redirect("/login")
+    app.locals.isLoggedIn = false;
+    res.redirect("/login");
 })
 
 

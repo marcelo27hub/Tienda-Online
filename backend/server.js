@@ -33,7 +33,13 @@ app.get("/productos", async  (req, res) =>{
     res.json(productos);
 });
 
-//enviar productos
+//admin panel
+app.get("/admin", async (req, res) => {
+    const productos = await Producto.find();
+    res.render("admin", {productos});
+})
+
+// Crear productos
 app.post("/crearProducto", async (req, res) => {
     await Producto.create(req.body);
     res.redirect(nuevoproducto);
@@ -47,7 +53,25 @@ app.get("/admin", async (req, res) => {
 });
 
 
-//enviar datos 
+//vista editar productos
+app.get("/editar/:id", async (req, res) => {
+    await Producto.findById(req.params.id,);
+    res.render("editar", {producto});
+});
+
+// generar edicion
+app.post("/editar/:id", async (req, res) => {
+    await Producto.findByIdAndUpdate(req.params.id);
+    res.redirect("/admin")
+})
+
+//eliminar productos
+app.post("/eliminar/:id", async (req, res) => {
+    await Producto.findByIdAndDelete(req.params.id);
+    res.redirect("/admin")
+});
+
+//datos login admin
 app.post("/login", (req, res) => {
     const {email, password} = req.body;
 
@@ -57,25 +81,6 @@ app.post("/login", (req, res) => {
         res.send("datos incorrectos");
     }
 });
-
-
-//actualizar productos
-app.put("/products/:id", async (req, res) => {
-    const actualizado = await Producto.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {new: true}
-    );
-    res.json(actualizado);
-});
-
-
-//eliminar productos
-app.delete("/eliminar/:id", async (req, res) => {
-    await Producto.findByIdAndDelete(req.params.id);
-    res.redirect("/admin")
-});
-
 
 // puerto en la cual escucha mi servidor 
 const PORT = 3000;

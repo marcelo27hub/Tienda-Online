@@ -1,9 +1,12 @@
-const producto = require("../models/producto");
 const Producto = require("../models/producto");
 
 // Admin
 
 exports.getAdmin = async (req, res) => {
+    if (!req.app.locals.isLoggedIn) {
+        return res.redirect("/login");
+    }
+    
     const productos = await Producto.find();
     res.render("admin", {productos});
 };
@@ -17,7 +20,7 @@ exports.crearProducto = async (req, res) => {
 // vista editar
 exports.vistaeditar = async (req, res) => {
     const producto =await Producto.findById(req.params.id);
-    res.redirect("admin", {producto});
+    res.render("editar", {producto});
 };
 
 // editar
@@ -28,6 +31,6 @@ exports.editarproducto = async (req, res) => {
 
 // eliminar 
 exports.eliminarproducto = async (req, res) => {
-    await Producto.findOneAndDelete(req.params.id);
+    await Producto.findByIdAndDelete(req.params.id);
     res.redirect("/admin");
 };

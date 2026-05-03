@@ -19,6 +19,7 @@ mongoose.connect("mongodb+srv://marcelov:mongodb27@cluster0.wgdl93g.mongodb.net/
 
 //modelo de productos (mongoDB)
 const Producto = require("./models/producto");
+const producto = require("./models/producto");
 
 //ruta base
 app.get("/", (req, res) => {
@@ -34,8 +35,8 @@ app.get("/productos", async  (req, res) =>{
 
 //enviar productos
 app.post("/crearProducto", async (req, res) => {
-    const nuevoproducto = await Producto.create(req.body);
-    res.json(nuevoproducto);
+    await Producto.create(req.body);
+    res.redirect(nuevoproducto);
 
 });
 
@@ -72,7 +73,7 @@ app.put("/products/:id", async (req, res) => {
 //eliminar productos
 app.delete("/eliminar/:id", async (req, res) => {
     await Producto.findByIdAndDelete(req.params.id);
-    res.send("producto eliminado")
+    res.redirect("/admin")
 });
 
 

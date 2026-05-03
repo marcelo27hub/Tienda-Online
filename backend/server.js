@@ -19,7 +19,6 @@ mongoose.connect("mongodb+srv://marcelov:mongodb27@cluster0.wgdl93g.mongodb.net/
 
 //modelo de productos (mongoDB)
 const Producto = require("./models/producto");
-const producto = require("./models/producto");
 
 //ruta base
 app.get("/", (req, res) => {
@@ -46,28 +45,24 @@ app.post("/crearProducto", async (req, res) => {
 
 });
 
-//ver panel de admin
-app.get("/admin", async (req, res) => {
-    const productos = await Producto.find();
-    res.render("admin", {productos});
-});
-
-
 //vista editar productos
 app.get("/editar/:id", async (req, res) => {
-    await Producto.findById(req.params.id,);
+    const producto = await Producto.findById(req.params.id,);
     res.render("editar", {producto});
 });
 
 // generar edicion
 app.post("/editar/:id", async (req, res) => {
-    await Producto.findByIdAndUpdate(req.params.id);
+    await Producto.findByIdAndUpdate(req.params.id, req.body);
     res.redirect("/admin")
 })
 
 //eliminar productos
 app.post("/eliminar/:id", async (req, res) => {
-    await Producto.findByIdAndDelete(req.params.id);
+    await Producto.findByIdAndDelete(
+        req.params.id, 
+        req.body);
+
     res.redirect("/admin")
 });
 

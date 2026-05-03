@@ -1,21 +1,22 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth")
 
 const productoController = require("../controllers/productoController");
 
 // admin
-router.get("/admin", productoController.getAdmin);
+router.get("/admin", auth, productoController.getAdmin);
 
 // crear
-router.post("/crearProducto", productoController.crearProducto);
+router.post("/crearProducto", auth, productoController.crearProducto);
 
 //editar vista
 router.get("/editar/:id", productoController.vistaeditar);
 
 //editar
-router.post("/editar/:id", productoController.editarproducto);
+router.post("/editar/:id", auth, productoController.editarproducto);
 
 //eliminar
-router.post("/eliminar/:id", productoController.eliminarproducto);
+router.post("/eliminar/:id", auth, productoController.eliminarproducto);
 
 module.exports = router;

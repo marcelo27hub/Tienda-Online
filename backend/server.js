@@ -40,8 +40,9 @@ app.post("/crearProducto", async (req, res) => {
 });
 
 //ver panel de admin
-app.get("/admin", (req, res) => {
-    res.send("panel admin")
+app.get("/admin", async (req, res) => {
+    const productos = await Producto.find();
+    res.render("admin", {productos});
 });
 
 

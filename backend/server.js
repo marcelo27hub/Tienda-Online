@@ -1,15 +1,21 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const session = require("express-session");
 
 // iniciamos app server
 const app = express();
 
-//variable global, si el admin se logueo
-app.locals.isLoggedIn = false;
-
 // middleware para leeer JSON
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+// config de la sesion
+app.use(session({
+    secret: "secreto_jeje",
+    resave: false,
+    saveUninitialized: false
+}));
+
 
 //motor de plantilla pug
 app.set("view engine", "pug");
@@ -42,7 +48,7 @@ app.post("/login", (req, res) => {
     const { email, password } = req.body;
 
     if (email === "marce@" && password === "1234") {
-        app.locals.isLoggedIn = true;
+        req.session.isLoggedIn = true;
         return res.redirect("/admin");
     } else {
         res.send("Datos incorrectos");
@@ -52,8 +58,9 @@ app.post("/login", (req, res) => {
 
 // logout 
 app.get("/logout", (req, res) => {
-    app.locals.isLoggedIn = false;
-    res.redirect("/login");
+    req.session.destroy(() => {
+        res.redirect("/login");
+    })
 })
 
 

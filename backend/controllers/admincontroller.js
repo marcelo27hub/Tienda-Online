@@ -6,18 +6,30 @@ exports.getLogin = (req, res) => {
 // enviar datos del admin
 exports.postLogin = (req, res) => {
     const { email, password } = req.body;
+    
+    // validacion basica
+    if (!email || !password){
+        return res.status(400).send("Faltan datos");
+    }
 
-    if (email === "marce@" && password === "1234") {
+    // validacion contra .env
+    if (
+        email === process.env.ADMIN_EMAIL &&
+        password === process.env.ADMIN_PASSWORD
+    ) {
         req.session.isLoggedIn = true;
         return res.redirect("/admin");
     }
 
-    res.send("Datos incorrectos");
+    return res.status(401).send("Credenciales incorrectos");
 };
 
 // cerrar sesion admin
 exports.logout = (req, res) => {
-    req.session.destroy(() => {
+    req.session.destroy((error) => {
+        if (error) {
+            return res.status(500).send("Error cerrando sesion");
+        }
         res.redirect("/login");
     });
 };

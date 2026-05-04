@@ -29,39 +29,15 @@ mongoose.connect("mongodb+srv://marcelov:mongodb27@cluster0.wgdl93g.mongodb.net/
 
 // rutas
 const productoRoutes = require("./routes/productoRoutes");
-app.use(productoRoutes);
+app.use("/admin", productoRoutes);
 
-const producto = require("./models/producto");
+const adminRoutes = require("./routes/adminRoutes")
+app.use("/", adminRoutes);
 
 // base
 app.get("/", (req, res) => {
     res.send("servidor corriendo");
 });
-
-//login
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-
-// datos del admin
-app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-
-    if (email === "marce@" && password === "1234") {
-        req.session.isLoggedIn = true;
-        return res.redirect("/admin");
-    } else {
-        res.send("Datos incorrectos");
-    }
-});
-
-
-// logout 
-app.get("/logout", (req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    })
-})
 
 
 //escuchar conexion 

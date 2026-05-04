@@ -1,4 +1,4 @@
-//login
+//login admin
 exports.getLogin = (req, res) => {
     res.render("login");
 };
@@ -15,7 +15,7 @@ exports.postLogin = (req, res) => {
     res.send("Datos incorrectos");
 };
 
-// cerrar sesion
+// cerrar sesion admin
 exports.logout = (req, res) => {
     req.session.destroy(() => {
         res.redirect("/login");

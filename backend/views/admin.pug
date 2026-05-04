@@ -17,10 +17,10 @@ html
 
 
                 // EDITAR
-                a(href=`/editar/${p._id}`) Editar 
+                a(href=`/admin/editar/${p._id}`) Editar 
 
                 // ELIMINAR
-                form(action=`/eliminar/${p._id}` method="POST") 
+                form(action=`/admin/eliminar/${p._id}` method="POST") 
                     button(type="submit") Eliminar 
 
                 hr 
@@ -28,7 +28,7 @@ html
         // CREAR PRODUCTO
         h2 Crear producto 
 
-        form(action="/crearProducto" method="POST") 
+        form(action="/admin/crearProducto" method="POST") 
             input(type="text" name="nombre" placeholder="nombre")
             input(type="text" name="precio" placeholder="precio")
             input(type="text" name="descripcion" placeholder="descripion")

@@ -5,13 +5,13 @@ const auth = require("../middleware/auth")
 const productoController = require("../controllers/productoController");
 
 // admin
-router.get("/admin", auth, productoController.getAdmin);
+router.get("/", auth, productoController.getAdmin);
 
 // crear
 router.post("/crearProducto", auth, productoController.crearProducto);
 
 //editar vista
-router.get("/editar/:id", productoController.vistaeditar);
+router.get("/editar/:id", auth, productoController.vistaeditar);
 
 //editar
 router.post("/editar/:id", auth, productoController.editarproducto);

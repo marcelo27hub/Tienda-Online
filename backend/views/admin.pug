@@ -5,7 +5,8 @@ html
     body 
         h1 Panel Admin 
 
-        a(href="/logout") Cerrar sesión
+        form(action="/logout" method="POST") 
+            button(type="submit") Cerrar sesion 
 
         hr
         // LISTA DE PRODUCTOS
@@ -30,6 +31,6 @@ html
 
         form(action="/admin/crearProducto" method="POST") 
             input(type="text" name="nombre" placeholder="nombre")
-            input(type="text" name="precio" placeholder="precio")
+            input(type="text" name="precio" placeholder="precio" min="1")
             input(type="text" name="descripcion" placeholder="descripion")
             button(type="submit") Crear  

@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 
 //modelo del producto
 const modelproduct = new mongoose.Schema({
-    nombre: {type: String, required: true},
-    precio: {type: Number, required: true},
-    descripcion: {type: String, required: true}
+    nombre: {type: String, required: true, trim: true},
+    precio: {type: Number, required: true, min: 1},
+    descripcion: {type: String, required: true, trim: true}
 });
 
 //para poder usarlo en cualquier otro archivo

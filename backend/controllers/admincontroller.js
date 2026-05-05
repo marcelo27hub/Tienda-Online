@@ -14,11 +14,11 @@ exports.postLogin = async (req, res) => {
         return res.status(400).send("Faltan datos");
     }
 
-    if (email !== process.env.ADMIN_PASSWORD){
+    if (email !== process.env.ADMIN_EMAIL){
         return res.status(401).send("Credenciales incorrectos");
     }
 
-    const isMatch = bcrypt.compare(password, process.env.ADMIN_PASSWORD);
+    const isMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
 
     if (!isMatch) {
         return res.status(401).send("Credenciales incorrectas");

@@ -1,0 +1,13 @@
+h1 Pedidos
+
+each p in pedidos
+    div
+        p Producto: #{p.producto.nombre}
+        p Cantidad: #{p.cantidad}
+        p Cliente: #{p.nombreCliente}
+        p Dirección: #{p.direccion}
+        p Estado: #{p.estado}
+        p Fecha: #{p.fecha}
+
+        form(action=`/admin/pedidos/${p._id}` method="POST")
+            button Cambiar estado

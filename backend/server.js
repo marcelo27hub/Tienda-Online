@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
     res.send("servidor corriendo");
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 //escuchar conexion 
 app.listen(3000, () =>{
     console.log("servidor corriendo en", PORT);

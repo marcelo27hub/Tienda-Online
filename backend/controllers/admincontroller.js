@@ -1,10 +1,12 @@
+const bcrypt = require("bcrypt");
+
 //login admin
 exports.getLogin = (req, res) => {
     res.render("login");
 };
 
 // enviar datos del admin
-exports.postLogin = (req, res) => {
+exports.postLogin = async (req, res) => {
     const { email, password } = req.body;
     
     // validacion basica
@@ -12,16 +14,18 @@ exports.postLogin = (req, res) => {
         return res.status(400).send("Faltan datos");
     }
 
-    // validacion contra .env
-    if (
-        email === process.env.ADMIN_EMAIL &&
-        password === process.env.ADMIN_PASSWORD
-    ) {
-        req.session.isLoggedIn = true;
-        return res.redirect("/admin");
+    if (email !== process.env.ADMIN_PASSWORD){
+        return res.status(401).send("Credenciales incorrectos");
     }
 
-    return res.status(401).send("Credenciales incorrectos");
+    const isMatch = bcrypt.compare(password, process.env.ADMIN_PASSWORD);
+
+    if (!isMatch) {
+        return res.status(401).send("Credenciales incorrectas");
+    }
+
+    req.session.isLoggedIn = true;
+    return res.redirect("/admin");
 };
 
 // cerrar sesion admin

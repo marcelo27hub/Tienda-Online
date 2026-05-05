@@ -4,8 +4,12 @@ const Producto = require("../models/producto");
 
 //obtiene todos los productos y renderiza el panel admin
 exports.getAdmin = async (req, res) => {
-    const productos = await Producto.find();
-    res.render("admin", {productos});
+    try {
+        const productos = await Producto.find();
+        res.status(200).render("admin", { productos });
+    } catch (error) {
+        res.status(500).send("Error cargando productos");
+    }
 };
 
 // crear producto
@@ -14,23 +18,49 @@ exports.crearProducto = async (req, res) => {
         await Producto.create(req.body);
         res.redirect("/admin");
     } catch (error) {
-        res.send("Error creando producto");
+        res.status(500).send("Error creando producto");
 }
 };
 
 // vista editar
 exports.vistaeditar = async (req, res) => {
-    const producto =await Producto.findById(req.params.id);
-    res.render("editar", {producto});
+    try {
+        const producto = await Producto.findById(req.params.id);
+
+        if (!producto) {
+            return res.status(404).send("Producto no encontrado");
+        }
+
+        res.status(200).render("editar", { producto });
+    } catch (error) {
+        res.status(500).send("Error cargando producto");
+    }
 };
 
 // editar
 exports.editarproducto = async (req, res) => {
+const { nombre, precio, descripcion } = req.body;
     try {
-        await Producto.findByIdAndUpdate(req.params.id, req.body);
+        const precioNumero = Number(precio);
+
+        if (!nombre || nombre.trim() === "") {
+            return res.status(400).send("Nombre obligatorio");
+        }
+
+        if (isNaN(precioNumero) || precioNumero <= 0) {
+            return res.status(400).send("Precio inválido");
+        }
+
+        await Producto.findByIdAndUpdate(req.params.id, {
+            nombre: nombre.trim(),
+            precio: precioNumero,
+            descripcion: descripcion?.trim()
+        }, { runValidators: true });
+
         res.redirect("/admin");
+
     } catch (error) {
-        res.send("Error editando producto");
+        res.status(500).send("Error editando producto");
     }
 };
 
@@ -40,6 +70,6 @@ exports.eliminarproducto = async (req, res) => {
         await Producto.findByIdAndDelete(req.params.id);
         res.redirect("/admin");
     } catch (error){
-        res.send("error eliminando producto");
+        res.status(500).send("error eliminando producto");
     }
 };

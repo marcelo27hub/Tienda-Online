@@ -2,8 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const multer = require("multer");
+const path = require("path");
 // iniciamos app server
 const app = express();
+
+// servir archivos estáticos
+app.use("/uploads", express.static("uploads"));
 
 // middleware para leeer JSON
 app.use(express.json());
@@ -24,7 +29,7 @@ app.set("views", "./views");
 
 //conexión a la base de datos MongoDB usando URI (Atlas)
 mongoose.connect(process.env.DB_URI)
-    .then(() => console.log("conectado a mongodb"))
+    .then(() => console.log("mongo conectado BACK"))
     .catch(err => console.log(err));
 
 
@@ -34,6 +39,9 @@ app.use("/admin", productoRoutes);
 
 const adminRoutes = require("./routes/adminRoutes")
 app.use("/", adminRoutes);
+
+const pedidoRoutes = require("./routes/pedidoRoutes");
+app.use("/admin", pedidoRoutes);
 
 // base
 app.get("/", (req, res) => {

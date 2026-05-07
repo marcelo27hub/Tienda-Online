@@ -80,7 +80,7 @@ http://localhost:4000/tienda
 
 Ambos servidores utilizan la misma base de datos MongoDB.
 
-Configuración en env:
+Configuración en env
 PORT=3000
 ADMIN_EMAIL=admin@gmail.com
 ADMIN_PASSWORD_HASH=$2b$10$QegIGGAxkXZllN8b1Ibs.e7M4p2p.cUnIM1rVMBhUWQCVLgoiwaSC

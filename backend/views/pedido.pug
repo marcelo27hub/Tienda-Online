@@ -1,13 +1,81 @@
-h1 Pedidos
+doctype html
+html
+    head
+        title Pedidos
 
-each p in pedidos
-    div
-        p Producto: #{p.producto.nombre}
-        p Cantidad: #{p.cantidad}
-        p Cliente: #{p.nombreCliente}
-        p Dirección: #{p.direccion}
-        p Estado: #{p.estado}
-        p Fecha: #{p.fecha}
+        style.
+            :root {
+                --bg: #0b0c10;
+                --card: #111318;
+                --border: #1f2330;
+                --text: #e5e7eb;
+                --muted: #9ca3af;
+                --accent: #a855f7;
+                --ok: #22c55e;
+                --warn: #f59e0b;
+                --danger: #ef4444;
+            }
 
-        form(action=`/admin/pedidos/${p._id}` method="POST")
-            button Cambiar estado
+            body {
+                margin: 0;
+                font-family: ui-sans-serif;
+                background: var(--bg);
+                color: var(--text);
+            }
+
+            h1 {
+                text-align: center;
+                padding: 20px;
+            }
+
+            .container {
+                padding: 20px;
+                display: grid;
+                gap: 15px;
+            }
+
+            .card {
+                background: var(--card);
+                border: 1px solid var(--border);
+                padding: 15px;
+                border-radius: 16px;
+            }
+
+            .status {
+                font-weight: bold;
+            }
+
+            .pendiente { color: var(--warn); }
+            .enviado { color: var(--ok); }
+            .cancelado { color: var(--danger); }
+
+            button {
+                margin-top: 8px;
+                padding: 8px;
+                border-radius: 10px;
+                border: none;
+                background: var(--accent);
+                color: white;
+                cursor: pointer;
+            }
+
+    body
+        h1 📦 Pedidos
+
+        .container
+            each p in pedidos
+                .card
+                    p Producto: #{p.producto ? p.producto.nombre : "Eliminado"}
+
+                    p Cantidad: #{p.cantidad}
+                    p Cliente: #{p.nombreCliente}
+                    p Dirección: #{p.direccion}
+
+                    p.status(class=p.estado) Estado: #{p.estado}
+
+                    if p.estado != "cancelado"
+                        form(action=`/admin/pedidos/${p._id}/estado` method="POST")
+                            button Cambiar estado
+
+                        form(action=`/admin/pedidos/${p._id}/cancelar` method="POST")
+                            button Cancelar

@@ -13,17 +13,20 @@ exports.postLogin = async (req, res) => {
     if (!email || !password){
         return res.status(400).send("Faltan datos");
     }
-
+    // validacion de email
     if (email !== process.env.ADMIN_EMAIL){
         return res.status(401).send("Credenciales incorrectos");
     }
 
+    // comparar hashes
     const isMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
 
+    // si no son iguales
     if (!isMatch) {
         return res.status(401).send("Credenciales incorrectas");
     }
 
+    // se logueo
     req.session.isLoggedIn = true;
     return res.redirect("/admin");
 };

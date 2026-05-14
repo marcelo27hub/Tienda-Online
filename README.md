@@ -84,10 +84,12 @@ Ambos servidores utilizan la misma base de datos MongoDB.
 
 ```env
 PORT=3000
-ADMIN_EMAIL=admin@gmail.com
-ADMIN_PASSWORD_HASH=$2b$10$QegIGGAxkXZllN8b1Ibs.e7M4p2p.cUnIM1rVMBhUWQCVLgoiwaSC
+ADMIN_EMAIL=tu_admin@gmial.com
+ADMIN_PASSWORD_HASH=tu_hash_contrasenha
 DB_URI=tu_mongodb_uri
 SESSION_SECRET=tu_secreto
+Observacion:
+Generar el hash de contraseña antes de iniciar el proyecto.
 ```
 
 ---

@@ -59,6 +59,10 @@ html
                 padding: 20px;
             }
 
+            .section {
+                margin-bottom: 35px;
+            }
+
             .grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -82,7 +86,6 @@ html
                 width: 100%;
                 aspect-ratio: 16 / 10;
                 object-fit: cover;
-                display: block;
             }
 
             .content {
@@ -172,31 +175,40 @@ html
 
         .container
 
-            h2 🛒 Productos
+            // 🔵 PEDIDOS
+            .section
+                h2 📦 Pedidos
+                a.btn.edit(href="/admin/pedidos") Ver pedidos
 
-            .grid
-                each p in productos
-                    .card
-                        img(src=`http://localhost:3000/uploads/${p.imagen}`)
+            // 🔵 PRODUCTOS
+            .section
+                h2 🛒 Productos
 
-                        .content
-                            h3 #{p.nombre}
-                            p #{p.descripcion}
-                            p.price 💰 #{p.precio}
+                .grid
+                    each p in productos
+                        .card
+                            img(src=`http://localhost:3000/uploads/${p.imagen}`)
 
-                            .btns
-                                a.btn.edit(href=`/admin/editar/${p._id}`) Editar
+                            .content
+                                h3 #{p.nombre}
+                                p #{p.descripcion}
+                                p.price 💰 #{p.precio}
 
-                                form(action=`/admin/eliminar/${p._id}` method="POST")
-                                    button.btn.delete(type="submit") Eliminar
+                                .btns
+                                    a.btn.edit(href=`/admin/editar/${p._id}`) Editar
 
-            .create
+                                    form(action=`/admin/eliminar/${p._id}` method="POST")
+                                        button.btn.delete(type="submit") Eliminar
+
+            // 🔵 CREAR PRODUCTO
+            .section
                 h2 ➕ Crear producto
 
-                form(action="/admin/crearProducto" method="POST" enctype="multipart/form-data")
-                    input(type="text" name="nombre" placeholder="Nombre" required)
-                    input(type="number" name="precio" placeholder="Precio" required)
-                    input(type="text" name="descripcion" placeholder="Descripción" required)
-                    input(type="file" name="imagen")
+                .create
+                    form(action="/admin/crearProducto" method="POST" enctype="multipart/form-data")
+                        input(type="text" name="nombre" placeholder="Nombre" required)
+                        input(type="number" name="precio" placeholder="Precio" required)
+                        input(type="text" name="descripcion" placeholder="Descripción" required)
+                        input(type="file" name="imagen")
 
-                    button(type="submit") Crear producto
+                        button(type="submit") Crear producto

@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 
 // traemos la logica de pedidos
-const pedidoController = require("../controllers/pedidoController");
+const pedidoController = require("../controllers/pedidocontroller");
 
 // pedidos
 router.get("/pedidos", auth, pedidoController.verPedidos);

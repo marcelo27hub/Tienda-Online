@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const adminController = require("../controllers/adminController");
+const adminController = require("../controllers/admincontroller");
 
 // pedir login, enviar login, cerrar sesion
 router.get("/login", adminController.getLogin);

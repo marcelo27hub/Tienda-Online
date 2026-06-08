@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const multer = require("multer");
 const path = require("path");
+
 // iniciamos app server
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 } // 1 hora
+    cookie: {httpOnly: true, maxAge: 1000 * 60 * 60 }
 }));
 
 

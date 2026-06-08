@@ -12,14 +12,20 @@ exports.getAdmin = async (req, res) => {
     }
 };
 
-// crear producto
+// agregar imagenes
 exports.crearProducto = async (req, res) => {
     try {
-        await Producto.create(req.body);
+        await Producto.create({
+            nombre: req.body.nombre,
+            precio: req.body.precio,
+            descripcion: req.body.descripcion,
+            imagen: req.file ? req.file.filename : null
+        });
+
         res.redirect("/admin");
     } catch (error) {
         res.status(500).send("Error creando producto");
-}
+    }
 };
 
 // vista editar
@@ -74,18 +80,3 @@ exports.eliminarproducto = async (req, res) => {
     }
 };
 
-// agregar imagenes
-exports.crearProducto = async (req, res) => {
-    try {
-        await Producto.create({
-            nombre: req.body.nombre,
-            precio: req.body.precio,
-            descripcion: req.body.descripcion,
-            imagen: req.file ? req.file.filename : null
-        });
-
-        res.redirect("/admin");
-    } catch (error) {
-        res.status(500).send("Error creando producto");
-    }
-};

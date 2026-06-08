@@ -1,42 +1,65 @@
 const bcrypt = require("bcrypt");
 
-//login admin
+// vista login
 exports.getLogin = (req, res) => {
     res.render("login");
 };
 
-// enviar datos del admin
+// procesar login
 exports.postLogin = async (req, res) => {
-    const { email, password } = req.body;
-    
-    // validacion basica
-    if (!email || !password){
-        return res.status(400).send("Faltan datos");
-    }
-    // validacion de email
-    if (email !== process.env.ADMIN_EMAIL){
-        return res.status(401).send("Credenciales incorrectos");
-    }
+    try {
 
-    // comparar hashes
-    const isMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
+        const { email, password } = req.body;
 
-    // si no son iguales
-    if (!isMatch) {
-        return res.status(401).send("Credenciales incorrectas");
+        // validación básica
+        if (!email || !password) {
+            return res.status(400).send("Faltan datos");
+        }
+
+        // verificar email
+        if (email !== process.env.ADMIN_EMAIL) {
+            return res.status(401)
+            .send("Credenciales incorrectas");
+        }
+
+        // comparar contraseña con hash
+        const isMatch = await bcrypt.compare(
+            password,
+            process.env.ADMIN_PASSWORD_HASH
+        );
+
+        // contraseña incorrecta
+        if (!isMatch) {
+            return res.status(401)
+            .send("Credenciales incorrectas");
+        }
+
+        // crear sesión
+        req.session.isLoggedIn = true;
+
+        return res.redirect("/admin");
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500)
+        .send("Error iniciando sesión");
     }
-
-    // se logueo
-    req.session.isLoggedIn = true;
-    return res.redirect("/admin");
 };
 
-// cerrar sesion admin
+// cerrar sesión
 exports.logout = (req, res) => {
+
     req.session.destroy((error) => {
+
         if (error) {
-            return res.status(500).send("Error cerrando sesion");
+            return res.status(500)
+            .send("Error cerrando sesión");
         }
+
         res.redirect("/login");
+
     });
+
 };
